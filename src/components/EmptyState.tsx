@@ -2,7 +2,13 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {colors} from '../theme';
 
-export default function EmptyState({icon = '📭', title, message}) {
+interface Props {
+  icon?: string;
+  title: string;
+  message?: string;
+}
+
+export default function EmptyState({icon = '📭', title, message}: Props) {
   return (
     <View style={styles.wrap}>
       <Text style={styles.icon}>{icon}</Text>

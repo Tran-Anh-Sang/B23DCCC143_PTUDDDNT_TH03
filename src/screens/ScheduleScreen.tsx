@@ -12,9 +12,11 @@ import {
 import {colors} from '../theme';
 import LessonItem from '../components/LessonItem';
 import EmptyState from '../components/EmptyState';
+import type {TabScreenProps} from '../navigation/types';
+import type {DayKey} from '../types';
 
-export default function ScheduleScreen({navigation}) {
-  const [day, setDay] = useState(todayKey());
+export default function ScheduleScreen({navigation}: TabScreenProps<'Schedule'>) {
+  const [day, setDay] = useState<DayKey>(todayKey());
 
   const lessons = useMemo(
     () =>
@@ -25,9 +27,9 @@ export default function ScheduleScreen({navigation}) {
   );
 
   const counts = useMemo(() => {
-    const map = {};
+    const map: Partial<Record<DayKey, number>> = {};
     schedule.forEach(l => {
-      map[l.day] = (map[l.day] || 0) + 1;
+      map[l.day] = (map[l.day] ?? 0) + 1;
     });
     return map;
   }, []);
@@ -37,6 +39,7 @@ export default function ScheduleScreen({navigation}) {
       <View style={styles.week}>
         {DAY_KEYS.map(k => {
           const active = k === day;
+          const hasLesson = !!counts[k];
           return (
             <Pressable
               key={k}
@@ -51,8 +54,8 @@ export default function ScheduleScreen({navigation}) {
               <View
                 style={[
                   styles.dot,
-                  counts[k] ? styles.dotOn : null,
-                  active && counts[k] ? styles.dotActive : null,
+                  hasLesson && styles.dotOn,
+                  active && hasLesson && styles.dotActive,
                 ]}
               />
             </Pressable>

@@ -1,8 +1,14 @@
-import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import React, {type ReactNode} from 'react';
+import {Pressable, StyleSheet, View, type StyleProp, type ViewStyle} from 'react-native';
 import {cardShadow, colors} from '../theme';
 
-export default function Card({children, style, onPress}) {
+interface Props {
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+  onPress?: () => void;
+}
+
+export default function Card({children, style, onPress}: Props) {
   if (onPress) {
     return (
       <Pressable

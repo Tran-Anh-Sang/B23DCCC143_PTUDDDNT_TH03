@@ -2,7 +2,13 @@ import React from 'react';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import {colors} from '../theme';
 
-export default function SearchBar({value, onChangeText, placeholder}) {
+interface Props {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder?: string;
+}
+
+export default function SearchBar({value, onChangeText, placeholder}: Props) {
   return (
     <View style={styles.wrap}>
       <Text style={styles.icon}>🔍</Text>

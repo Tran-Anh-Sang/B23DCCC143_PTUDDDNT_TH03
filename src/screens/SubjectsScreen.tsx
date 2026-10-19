@@ -7,16 +7,19 @@ import SearchBar from '../components/SearchBar';
 import FilterChips from '../components/FilterChips';
 import SubjectItem from '../components/SubjectItem';
 import EmptyState from '../components/EmptyState';
+import type {TabScreenProps} from '../navigation/types';
 
-const CREDIT_FILTERS = [
+type CreditFilter = 'all' | 2 | 3;
+
+const CREDIT_FILTERS: {key: CreditFilter; label: string}[] = [
   {key: 'all', label: 'Tất cả'},
   {key: 2, label: '2 tín chỉ'},
   {key: 3, label: '3 tín chỉ'},
 ];
 
-export default function SubjectsScreen({navigation}) {
+export default function SubjectsScreen({navigation}: TabScreenProps<'Subjects'>) {
   const [query, setQuery] = useState('');
-  const [credit, setCredit] = useState('all');
+  const [credit, setCredit] = useState<CreditFilter>('all');
 
   const data = useMemo(() => {
     const q = normalize(query);
@@ -52,7 +55,9 @@ export default function SubjectsScreen({navigation}) {
         renderItem={({item}) => (
           <SubjectItem
             subject={item}
-            onPress={() => navigation.navigate('SubjectDetail', {subjectId: item.id})}
+            onPress={() =>
+              navigation.navigate('SubjectDetail', {subjectId: item.id})
+            }
           />
         )}
         ListEmptyComponent={

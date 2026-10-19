@@ -4,8 +4,14 @@ import Card from './Card';
 import Badge from './Badge';
 import {getSubject} from '../data/mockData';
 import {colors} from '../theme';
+import type {Lesson} from '../types';
 
-export default function LessonItem({lesson, onPress}) {
+interface Props {
+  lesson: Lesson;
+  onPress: () => void;
+}
+
+export default function LessonItem({lesson, onPress}: Props) {
   const subject = getSubject(lesson.subjectId);
   return (
     <Card onPress={onPress} style={styles.card}>

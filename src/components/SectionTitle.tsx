@@ -2,7 +2,13 @@ import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {colors} from '../theme';
 
-export default function SectionTitle({title, actionLabel, onAction}) {
+interface Props {
+  title: string;
+  actionLabel?: string;
+  onAction?: () => void;
+}
+
+export default function SectionTitle({title, actionLabel, onAction}: Props) {
   return (
     <View style={styles.row}>
       <Text style={styles.title}>{title}</Text>

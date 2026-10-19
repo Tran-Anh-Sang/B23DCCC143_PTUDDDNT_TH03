@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   View,
+  type TextInputProps,
 } from 'react-native';
 import {useApp} from '../context/AppContext';
 import {getSubject, grades, subjects} from '../data/mockData';
@@ -17,15 +18,20 @@ import Badge from '../components/Badge';
 import InfoRow from '../components/InfoRow';
 import SectionTitle from '../components/SectionTitle';
 import EmptyState from '../components/EmptyState';
+import type {TabScreenProps} from '../navigation/types';
+import type {Student} from '../types';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^0\d{9}$/;
 
+type EditableField = 'name' | 'email' | 'phone';
+type FormErrors = Partial<Record<EditableField, string>>;
+
 function ProfileHeader() {
   const {profile, updateProfile} = useApp();
   const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState(profile);
-  const [errors, setErrors] = useState({});
+  const [draft, setDraft] = useState<Student>(profile);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const {gpa, credits} = calcGPA(grades, subjects);
 
@@ -36,9 +42,13 @@ function ProfileHeader() {
   };
 
   const save = () => {
-    const e = {};
-    if (!draft.name.trim()) e.name = 'Họ tên không được để trống';
-    if (!EMAIL_RE.test(draft.email.trim())) e.email = 'Email không hợp lệ';
+    const e: FormErrors = {};
+    if (!draft.name.trim()) {
+      e.name = 'Họ tên không được để trống';
+    }
+    if (!EMAIL_RE.test(draft.email.trim())) {
+      e.email = 'Email không hợp lệ';
+    }
     if (!PHONE_RE.test(draft.phone.trim())) {
       e.phone = 'Số điện thoại gồm 10 chữ số, bắt đầu bằng 0';
     }
@@ -143,12 +153,16 @@ function ProfileHeader() {
   );
 }
 
-function Field({label, error, ...inputProps}) {
+function Field({
+  label,
+  error,
+  ...inputProps
+}: {label: string; error?: string} & TextInputProps) {
   return (
     <View style={styles.field}>
       <Text style={styles.fieldLabel}>{label}</Text>
       <TextInput
-        style={[styles.input, error && styles.inputError]}
+        style={[styles.input, error ? styles.inputError : null]}
         placeholderTextColor={colors.sub}
         {...inputProps}
       />
@@ -157,7 +171,7 @@ function Field({label, error, ...inputProps}) {
   );
 }
 
-export default function ProfileScreen({navigation}) {
+export default function ProfileScreen({navigation}: TabScreenProps<'Profile'>) {
   const {resetData} = useApp();
 
   const confirmReset = () =>
@@ -186,7 +200,9 @@ export default function ProfileScreen({navigation}) {
         return (
           <Card
             style={styles.gradeCard}
-            onPress={() => navigation.navigate('GradeDetail', {subjectId: item.subjectId})}>
+            onPress={() =>
+              navigation.navigate('GradeDetail', {subjectId: item.subjectId})
+            }>
             <View style={{flex: 1, marginRight: 10}}>
               <Text style={styles.gradeName} numberOfLines={2}>
                 {subject ? subject.name : ''}
@@ -198,14 +214,15 @@ export default function ProfileScreen({navigation}) {
             {total == null ? (
               <Badge label="Đang học" tone="neutral" />
             ) : (
-              <Badge label={`${total.toFixed(1)} • ${letter}`} tone={gradeTone(total)} />
+              <Badge
+                label={`${total.toFixed(1)} • ${letter}`}
+                tone={gradeTone(total)}
+              />
             )}
           </Card>
         );
       }}
-      ListEmptyComponent={
-        <EmptyState icon="📄" title="Chưa có kết quả học tập" />
-      }
+      ListEmptyComponent={<EmptyState icon="📄" title="Chưa có kết quả học tập" />}
       ListFooterComponent={
         <Pressable style={styles.reset} onPress={confirmReset}>
           <Text style={styles.resetText}>Đặt lại dữ liệu mẫu</Text>

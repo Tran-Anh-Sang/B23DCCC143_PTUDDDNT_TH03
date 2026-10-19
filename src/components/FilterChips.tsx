@@ -1,9 +1,27 @@
 import React from 'react';
-import {Pressable, ScrollView, StyleSheet, Text} from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 import {colors} from '../theme';
 
-// options: [{key, label}]
-export default function FilterChips({options, value, onChange, style}) {
+interface Props<K extends string | number> {
+  options: {key: K; label: string}[];
+  value: K;
+  onChange: (key: K) => void;
+  style?: StyleProp<ViewStyle>;
+}
+
+export default function FilterChips<K extends string | number>({
+  options,
+  value,
+  onChange,
+  style,
+}: Props<K>) {
   return (
     <ScrollView
       horizontal

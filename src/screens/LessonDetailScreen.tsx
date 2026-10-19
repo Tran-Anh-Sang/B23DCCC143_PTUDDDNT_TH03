@@ -7,10 +7,14 @@ import Card from '../components/Card';
 import Badge from '../components/Badge';
 import InfoRow from '../components/InfoRow';
 import EmptyState from '../components/EmptyState';
+import type {RootStackScreenProps} from '../navigation/types';
 
-export default function LessonDetailScreen({route, navigation}) {
+export default function LessonDetailScreen({
+  route,
+  navigation,
+}: RootStackScreenProps<'LessonDetail'>) {
   const lesson = getLesson(route.params.lessonId);
-  const subject = lesson ? getSubject(lesson.subjectId) : null;
+  const subject = lesson ? getSubject(lesson.subjectId) : undefined;
 
   if (!lesson || !subject) {
     return <EmptyState icon="⚠️" title="Không tìm thấy buổi học" />;

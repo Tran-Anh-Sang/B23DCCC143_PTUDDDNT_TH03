@@ -1,3 +1,5 @@
+import type {ViewStyle} from 'react-native';
+
 export const colors = {
   primary: '#2563EB',
   primaryLight: '#DBEAFE',
@@ -14,7 +16,7 @@ export const colors = {
   dangerLight: '#FEE2E2',
 };
 
-export const cardShadow = {
+export const cardShadow: ViewStyle = {
   shadowColor: '#000',
   shadowOpacity: 0.06,
   shadowRadius: 6,

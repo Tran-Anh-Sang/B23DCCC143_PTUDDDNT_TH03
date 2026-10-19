@@ -6,8 +6,9 @@ import LessonDetailScreen from '../screens/LessonDetailScreen';
 import AssignmentDetailScreen from '../screens/AssignmentDetailScreen';
 import GradeDetailScreen from '../screens/GradeDetailScreen';
 import {colors} from '../theme';
+import type {RootStackParamList} from './types';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
   return (

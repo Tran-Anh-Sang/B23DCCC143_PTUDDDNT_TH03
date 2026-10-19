@@ -7,8 +7,11 @@ import Card from '../components/Card';
 import Badge from '../components/Badge';
 import InfoRow from '../components/InfoRow';
 import EmptyState from '../components/EmptyState';
+import type {RootStackScreenProps} from '../navigation/types';
 
-export default function GradeDetailScreen({route}) {
+export default function GradeDetailScreen({
+  route,
+}: RootStackScreenProps<'GradeDetail'>) {
   const {subjectId} = route.params;
   const subject = getSubject(subjectId);
   const grade = getGrade(subjectId);
@@ -44,10 +47,11 @@ export default function GradeDetailScreen({route}) {
               style={[styles.scoreRow, i < WEIGHTS.length - 1 && styles.border]}>
               <View style={{flex: 1}}>
                 <Text style={styles.scoreName}>{w.label}</Text>
-                <Text style={styles.scoreWeight}>Trọng số {w.weight * 100}%</Text>
+                <Text style={styles.scoreWeight}>
+                  Trọng số {Math.round(w.weight * 100)}%
+                </Text>
               </View>
-              <Text
-                style={[styles.score, score == null && {color: colors.sub}]}>
+              <Text style={[styles.score, score == null && {color: colors.sub}]}>
                 {score == null ? 'Chưa có' : score.toFixed(1)}
               </Text>
             </View>

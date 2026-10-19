@@ -5,15 +5,20 @@ import {colors} from '../theme';
 import FilterChips from '../components/FilterChips';
 import AssignmentItem from '../components/AssignmentItem';
 import EmptyState from '../components/EmptyState';
+import type {TabScreenProps} from '../navigation/types';
 
-export default function AssignmentsScreen({navigation}) {
+type Filter = 'all' | 'todo' | 'done';
+
+export default function AssignmentsScreen({
+  navigation,
+}: TabScreenProps<'Assignments'>) {
   const {assignments, toggleAssignment} = useApp();
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState<Filter>('all');
 
   const todoCount = assignments.filter(a => !a.done).length;
   const doneCount = assignments.length - todoCount;
 
-  const options = [
+  const options: {key: Filter; label: string}[] = [
     {key: 'all', label: `Tất cả (${assignments.length})`},
     {key: 'todo', label: `Chưa hoàn thành (${todoCount})`},
     {key: 'done', label: `Đã hoàn thành (${doneCount})`},
@@ -28,7 +33,7 @@ export default function AssignmentsScreen({navigation}) {
       if (a.done !== b.done) {
         return a.done ? 1 : -1;
       }
-      return new Date(a.dueDate) - new Date(b.dueDate);
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
     });
   }, [assignments, filter]);
 
@@ -45,7 +50,9 @@ export default function AssignmentsScreen({navigation}) {
         renderItem={({item}) => (
           <AssignmentItem
             assignment={item}
-            onPress={() => navigation.navigate('AssignmentDetail', {assignmentId: item.id})}
+            onPress={() =>
+              navigation.navigate('AssignmentDetail', {assignmentId: item.id})
+            }
             onToggle={() => toggleAssignment(item.id)}
           />
         )}

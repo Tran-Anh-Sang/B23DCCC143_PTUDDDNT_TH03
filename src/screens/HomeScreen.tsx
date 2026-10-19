@@ -8,15 +8,18 @@ import Card from '../components/Card';
 import SectionTitle from '../components/SectionTitle';
 import AssignmentItem from '../components/AssignmentItem';
 import EmptyState from '../components/EmptyState';
+import type {TabScreenProps} from '../navigation/types';
 
-export default function HomeScreen({navigation}) {
+export default function HomeScreen({navigation}: TabScreenProps<'Home'>) {
   const {profile, assignments, toggleAssignment} = useApp();
 
   const pending = useMemo(
     () =>
       assignments
         .filter(a => !a.done)
-        .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate)),
+        .sort(
+          (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime(),
+        ),
     [assignments],
   );
   const upcoming = pending.slice(0, 5);
@@ -31,9 +34,7 @@ export default function HomeScreen({navigation}) {
         <Text style={styles.meta}>
           MSSV: {profile.id} • {profile.className}
         </Text>
-        <Text style={styles.today}>
-          Hôm nay bạn có {todayCount} buổi học
-        </Text>
+        <Text style={styles.today}>Hôm nay bạn có {todayCount} buổi học</Text>
       </View>
 
       <View style={styles.stats}>
@@ -51,7 +52,9 @@ export default function HomeScreen({navigation}) {
         renderItem={({item}) => (
           <Card
             style={styles.subjectCard}
-            onPress={() => navigation.navigate('SubjectDetail', {subjectId: item.id})}>
+            onPress={() =>
+              navigation.navigate('SubjectDetail', {subjectId: item.id})
+            }>
             <Text style={styles.subjectCode}>{item.code}</Text>
             <Text style={styles.subjectName} numberOfLines={2}>
               {item.name}
@@ -82,7 +85,9 @@ export default function HomeScreen({navigation}) {
       renderItem={({item}) => (
         <AssignmentItem
           assignment={item}
-          onPress={() => navigation.navigate('AssignmentDetail', {assignmentId: item.id})}
+          onPress={() =>
+            navigation.navigate('AssignmentDetail', {assignmentId: item.id})
+          }
           onToggle={() => toggleAssignment(item.id)}
         />
       )}
@@ -97,7 +102,7 @@ export default function HomeScreen({navigation}) {
   );
 }
 
-function Stat({value, label, warn}) {
+function Stat({value, label, warn}: {value: number; label: string; warn?: boolean}) {
   return (
     <Card style={styles.stat}>
       <Text style={[styles.statValue, warn && {color: colors.warn}]}>{value}</Text>

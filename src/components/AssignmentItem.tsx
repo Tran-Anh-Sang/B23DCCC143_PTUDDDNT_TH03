@@ -5,8 +5,15 @@ import Badge from './Badge';
 import {getSubject} from '../data/mockData';
 import {formatDateTime, dueInfo} from '../utils/date';
 import {colors} from '../theme';
+import type {Assignment} from '../types';
 
-export default function AssignmentItem({assignment, onPress, onToggle}) {
+interface Props {
+  assignment: Assignment;
+  onPress: () => void;
+  onToggle: () => void;
+}
+
+export default function AssignmentItem({assignment, onPress, onToggle}: Props) {
   const subject = getSubject(assignment.subjectId);
   const due = dueInfo(assignment.dueDate, assignment.done);
   return (

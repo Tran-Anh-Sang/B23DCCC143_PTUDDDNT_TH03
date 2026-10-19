@@ -8,8 +8,12 @@ import Card from '../components/Card';
 import Badge from '../components/Badge';
 import InfoRow from '../components/InfoRow';
 import EmptyState from '../components/EmptyState';
+import type {RootStackScreenProps} from '../navigation/types';
 
-export default function AssignmentDetailScreen({route, navigation}) {
+export default function AssignmentDetailScreen({
+  route,
+  navigation,
+}: RootStackScreenProps<'AssignmentDetail'>) {
   const {assignments, setAssignmentDone} = useApp();
   const assignment = assignments.find(a => a.id === route.params.assignmentId);
 

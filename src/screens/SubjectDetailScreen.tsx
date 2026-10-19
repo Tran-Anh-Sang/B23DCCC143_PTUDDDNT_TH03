@@ -11,8 +11,12 @@ import InfoRow from '../components/InfoRow';
 import SectionTitle from '../components/SectionTitle';
 import AssignmentItem from '../components/AssignmentItem';
 import EmptyState from '../components/EmptyState';
+import type {RootStackScreenProps} from '../navigation/types';
 
-export default function SubjectDetailScreen({route, navigation}) {
+export default function SubjectDetailScreen({
+  route,
+  navigation,
+}: RootStackScreenProps<'SubjectDetail'>) {
   const {subjectId} = route.params;
   const subject = getSubject(subjectId);
   const {assignments, toggleAssignment} = useApp();
@@ -33,8 +37,7 @@ export default function SubjectDetailScreen({route, navigation}) {
     return <EmptyState icon="⚠️" title="Không tìm thấy môn học" />;
   }
 
-  const grade = getGrade(subjectId);
-  const total = totalScore(grade);
+  const total = totalScore(getGrade(subjectId));
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -96,7 +99,9 @@ export default function SubjectDetailScreen({route, navigation}) {
           <View key={a.id} style={styles.row}>
             <AssignmentItem
               assignment={a}
-              onPress={() => navigation.navigate('AssignmentDetail', {assignmentId: a.id})}
+              onPress={() =>
+                navigation.navigate('AssignmentDetail', {assignmentId: a.id})
+              }
               onToggle={() => toggleAssignment(a.id)}
             />
           </View>

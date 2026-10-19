@@ -2,7 +2,13 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {colors} from '../theme';
 
-export default function InfoRow({label, value, last}) {
+interface Props {
+  label: string;
+  value: string;
+  last?: boolean;
+}
+
+export default function InfoRow({label, value, last}: Props) {
   return (
     <View style={[styles.row, !last && styles.border]}>
       <Text style={styles.label}>{label}</Text>

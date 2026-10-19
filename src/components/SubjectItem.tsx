@@ -3,8 +3,14 @@ import {StyleSheet, Text, View} from 'react-native';
 import Card from './Card';
 import Badge from './Badge';
 import {colors} from '../theme';
+import type {Subject} from '../types';
 
-export default function SubjectItem({subject, onPress}) {
+interface Props {
+  subject: Subject;
+  onPress: () => void;
+}
+
+export default function SubjectItem({subject, onPress}: Props) {
   return (
     <Card onPress={onPress} style={styles.card}>
       <View style={styles.codeBox}>

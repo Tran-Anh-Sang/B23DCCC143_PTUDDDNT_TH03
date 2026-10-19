@@ -1,8 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, type StyleProp, type ViewStyle} from 'react-native';
 import {colors} from '../theme';
+import type {Tone} from '../types';
 
-const TONES = {
+const TONES: Record<Tone, {bg: string; fg: string}> = {
   success: {bg: colors.successLight, fg: colors.success},
   warn: {bg: colors.warnLight, fg: colors.warn},
   danger: {bg: colors.dangerLight, fg: colors.danger},
@@ -10,8 +11,14 @@ const TONES = {
   neutral: {bg: colors.border, fg: colors.sub},
 };
 
-export default function Badge({label, tone = 'neutral', style}) {
-  const t = TONES[tone] || TONES.neutral;
+interface Props {
+  label: string;
+  tone?: Tone;
+  style?: StyleProp<ViewStyle>;
+}
+
+export default function Badge({label, tone = 'neutral', style}: Props) {
+  const t = TONES[tone];
   return (
     <View style={[styles.badge, {backgroundColor: t.bg}, style]}>
       <Text style={[styles.text, {color: t.fg}]}>{label}</Text>

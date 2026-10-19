@@ -1,22 +1,25 @@
-const pad = n => String(n).padStart(2, '0');
+import type {DayKey, Tone} from '../types';
 
-export const formatDate = iso => {
+const pad = (n: number): string => String(n).padStart(2, '0');
+
+export const formatDate = (iso: string): string => {
   const d = new Date(iso);
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
 };
 
-export const formatTime = iso => {
+export const formatTime = (iso: string): string => {
   const d = new Date(iso);
   return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
-export const formatDateTime = iso => `${formatTime(iso)} - ${formatDate(iso)}`;
+export const formatDateTime = (iso: string): string =>
+  `${formatTime(iso)} - ${formatDate(iso)}`;
 
-const startOfDay = d =>
+const startOfDay = (d: Date): number =>
   new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
 
 // Trả về nhãn và tông màu hiển thị cho hạn nộp bài tập
-export function dueInfo(iso, done) {
+export function dueInfo(iso: string, done: boolean): {label: string; tone: Tone} {
   if (done) {
     return {label: 'Đã hoàn thành', tone: 'success'};
   }
@@ -35,8 +38,9 @@ export function dueInfo(iso, done) {
   return {label: `Còn ${diff} ngày`, tone: 'info'};
 }
 
-export const DAY_KEYS = [2, 3, 4, 5, 6, 7, 8];
-export const DAY_LABELS = {
+export const DAY_KEYS: DayKey[] = [2, 3, 4, 5, 6, 7, 8];
+
+export const DAY_LABELS: Record<DayKey, string> = {
   2: 'Thứ 2',
   3: 'Thứ 3',
   4: 'Thứ 4',
@@ -45,25 +49,35 @@ export const DAY_LABELS = {
   7: 'Thứ 7',
   8: 'Chủ nhật',
 };
-export const DAY_SHORT = {2: 'T2', 3: 'T3', 4: 'T4', 5: 'T5', 6: 'T6', 7: 'T7', 8: 'CN'};
+
+export const DAY_SHORT: Record<DayKey, string> = {
+  2: 'T2',
+  3: 'T3',
+  4: 'T4',
+  5: 'T5',
+  6: 'T6',
+  7: 'T7',
+  8: 'CN',
+};
 
 // 2..7 = Thứ 2..Thứ 7, 8 = Chủ nhật
-export const todayKey = () => {
+export const todayKey = (): DayKey => {
   const g = new Date().getDay();
-  return g === 0 ? 8 : g + 1;
+  return (g === 0 ? 8 : g + 1) as DayKey;
 };
 
 // Ngày (Date) của một thứ trong tuần hiện tại (tuần bắt đầu từ Thứ 2)
-export const dateOfDayKey = key => {
+export const dateOfDayKey = (key: DayKey): Date => {
   const d = new Date();
   d.setDate(d.getDate() + (key - todayKey()));
   return d;
 };
 
-export const formatDayMonth = d => `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`;
+export const formatDayMonth = (d: Date): string =>
+  `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`;
 
 // Bỏ dấu tiếng Việt để tìm kiếm không phân biệt dấu
-export const normalize = s =>
+export const normalize = (s: string): string =>
   String(s || '')
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
